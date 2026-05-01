@@ -13,17 +13,17 @@ LDFLAGS= -nostdlib -T $(LD_FILE) -Wl,-Map=Output/GPIO.map
 build: Output/GPIO.hex
 
 Output/main.o: User/src/main.c
-	$(CC) $(CCFLAGS) -o Output/main.o User/src/main.c
+	$(CC) $(CCFLAGS) -o $@ $^
 Output/GPIO.o: Driver/GPIO/src/GPIO.c
-	$(CC) $(CCFLAGS) -o Output/GPIO.o Driver/GPIO/src/GPIO.c
+	$(CC) $(CCFLAGS) -o $@ $^
 Output/stm32_startup.o: Startup/stm32_startup.c
-	$(CC) $(CCFLAGS) -o Output/stm32_startup.o Startup/stm32_startup.c
+	$(CC) $(CCFLAGS) -o $@ $^
 
 Output/GPIO.elf:Output/main.o Output/GPIO.o Output/stm32_startup.o
-	$(CC) $(LDFLAGS) -o Output/GPIO.elf Output/main.o Output/GPIO.o Output/stm32_startup.o
+	$(CC) $(LDFLAGS) -o $@ $^
 
 Output/GPIO.hex: Output/GPIO.elf
-	$(GCC_DIR)/bin/arm-none-eabi-objcopy -O ihex Output/GPIO.elf Output/GPIO.hex
+	$(GCC_DIR)/bin/arm-none-eabi-objcopy -O ihex "$^" "$@"
 
 .PHONY: flash
 flash: Output/GPIO.elf

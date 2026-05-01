@@ -10,7 +10,7 @@ int main()
 	while(1)
 	{
 		PA->OUT ^= (1 << 5);
-		myDelay(50);
+		myDelay(10);
 	}
 	
 }
