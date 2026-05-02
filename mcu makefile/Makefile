@@ -2,19 +2,16 @@ GCC_DIR := /opt/gcc-arm-none-eabi-10.3-2021.10
 CC := $(GCC_DIR)/bin/arm-none-eabi-gcc
 LD_FILE := Linker/stm_ls.ld
 
+include ./User/Make/config.mak
+
 # Versatile module changing
 MODULE := GPIO
-PATH_OUTPUT := ./Output
 
-# Include Files
-INC_DIRS += Driver/$(MODULE)/inc \
-			User/inc
-INC_FILES += $(foreach INC_DIRS,$(INC_DIRS),$(wildcard $(INC_DIRS)/*))
+# Warning if empty module
+ifeq ($(MODULE),)
+	@echo "Error missing MODULE, Ex: export MODULE=GPIO"
+endif
 
-# Source Files
-SRC_DIRS += Driver/$(MODULE)/src \
-			User/src \
-			Startup
 SRC_FILES += $(foreach SRC_DIRS,$(SRC_DIRS),$(wildcard $(SRC_DIRS)/*))
 
 CHIP=cortex-m4
